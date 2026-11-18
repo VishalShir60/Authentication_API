@@ -1,4 +1,4 @@
-# Authentication API (Portfolio Project)
+# Authentication API 
 
 A clean, production-ready, RESTful Authentication & User Management API built with **Node.js**, **Express.js**, **MongoDB (Mongoose)**, **JWT**, **Bcrypt**, and **Nodemailer**.
 
@@ -190,52 +190,3 @@ docker-compose down
    - Once a verification token is used, `user.verificationToken` is immediately cleared to `null` to eliminate token replay vulnerabilities.
 
 ---
-
-## 💬 Interview Q&A Guide
-
-Here are short, clear, and honest answers to the most common backend interview questions based on this codebase:
-
-### 1. What is the difference between authentication and authorization?
-- **Authentication (AuthN)** is verifying **who you are** (e.g., logging in with email and password to prove your identity).
-- **Authorization (AuthZ)** is determining **what you are allowed to do** (e.g., checking if an authenticated user has permission to edit a specific record or access an admin dashboard).
-
-### 2. Why hash passwords? Why bcrypt and not plain SHA or encryption?
-- **Why hash?** If the database is compromised, hashed passwords cannot be trivially read or reversed into plain text.
-- **Why not encryption?** Encryption is two-way (reversible with a key). Passwords should never need to be decrypted.
-- **Why bcrypt instead of SHA-256 or MD5?** SHA algorithms are designed to be fast (ideal for file integrity), meaning an attacker can compute billions of guesses per second on modern GPUs. Bcrypt is intentionally slow, memory-intensive, and uses a built-in salt to make brute-force and rainbow table attacks computationally impractical.
-
-### 3. What is a JWT? What are its 3 parts?
-A JSON Web Token (JWT) is a compact, URL-safe standard (RFC 7519) for transmitting claims securely between parties. It consists of three parts separated by dots (`.`):
-1. **Header:** Algorithm used (e.g., `HS256`) and token type (`JWT`).
-2. **Payload:** The claims/data (e.g., `{ id: user._id, exp: 1731900000 }`).
-3. **Signature:** Calculated by hashing `Base64(Header) + "." + Base64(Payload)` with the secret key. The server uses this signature to verify that the token was not tampered with.
-
-### 4. Why keep the JWT payload small and add an expiry?
-- **Small payload:** The token is sent in the `Authorization` header with every HTTP request. Keeping it small reduces network overhead. More importantly, JWT payload data is only encoded in Base64—not encrypted—so sensitive data like passwords or credit cards must never be stored there.
-- **Expiry (`exp`):** Because JWTs are stateless, the server cannot invalidate an issued token without custom state mechanisms. Adding an expiration window limits the damage if a token is intercepted.
-
-### 5. How does logout work with JWT, and what are the limitations?
-- **How it works:** In a pure stateless JWT setup, logout is handled by the client destroying its local copy of the token (e.g., removing it from `localStorage` or clearing cookies).
-- **Limitation:** The token remains mathematically valid on the server until its expiration timestamp passes. If an attacker stole the token before logout, they could still use it until it expires.
-
-### 6. What is middleware in Express? Walk through `authMiddleware`.
-- **What is middleware?** A middleware function has access to the request object (`req`), response object (`res`), and the `next` function in the application's request-response cycle. It can execute code, modify `req` or `res`, or terminate the cycle early.
-- **Walkthrough of `authMiddleware`:**
-  1. Inspects `req.headers.authorization` to ensure it exists and starts with `Bearer `.
-  2. Extracts the raw token string.
-  3. Calls `jwt.verify(token, secret)`. If invalid or expired, immediately returns `401 Unauthorized`.
-  4. Takes the decoded user ID and queries MongoDB with `User.findById(decoded.id).select('-password')`.
-  5. Attaches the user object to `req.user` and calls `next()` so downstream controllers can access the authenticated user profile.
-
-### 7. How does email verification work in this project?
-1. On registration, the server uses `crypto.randomBytes(32).toString('hex')` to create a high-entropy string and stores it in `user.verificationToken`.
-2. An activation link containing this token is sent via Nodemailer.
-3. When clicked (`GET /api/auth/verify/:token`), the backend queries for a user with that token.
-4. If found, it flips `isVerified = true`, resets `verificationToken = null` (preventing token reuse), and saves the user.
-5. The login endpoint explicitly checks `isVerified` before issuing a JWT.
-
-### 8. What would I add next in a production system?
-1. **Refresh Tokens & Access Tokens:** Issue short-lived access tokens (15 minutes) paired with secure, HTTP-only refresh tokens stored in a database to allow seamless token rotation and instant revocation.
-2. **Password Reset Flow:** Forgot-password endpoint issuing time-limited (10-minute) hashed reset tokens via email.
-3. **Role-Based Access Control (RBAC):** Middleware like `authorizeRoles('admin', 'manager')` to restrict specific endpoints based on user permissions.
-4. **Token Blacklist with Redis:** A Redis cache storing revoked JWT IDs (`jti`) with an automatic TTL matching the token's remaining lifetime to support instant logout and session revocation.
