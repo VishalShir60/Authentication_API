@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # MongoDB Database Service
+  mongodb:
+    image: mongo:7-jammy
+    container_name: auth-api-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # Node.js Authentication API Service
+  api:
+    build: .
+    container_name: auth-api-server
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/auth_db
+      - JWT_SECRET=supersecretjwtkey_docker_portfolio_2026
+      - CLIENT_URL=http://localhost:5000
+      - EMAIL_USER=
+      - EMAIL_PASS=
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:

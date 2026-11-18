@@ -1,0 +1,200 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Authentication API",
+    "version": "1.0.0",
+    "description": "Production-ready Authentication API built with Node.js, Express, MongoDB, and JWT."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5001",
+      "description": "Local development server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Enter your JWT token in the format: Bearer <token>"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "65b8c9d18e7e123456789abc" },
+          "name": { "type": "string", "example": "Alex Doe" },
+          "email": { "type": "string", "example": "alex@example.com" },
+          "isVerified": { "type": "boolean", "example": true },
+          "createdAt": { "type": "string", "format": "date-time", "example": "2026-11-17T12:00:00.000Z" }
+        }
+      },
+      "RegisterInput": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": { "type": "string", "example": "Alex Doe" },
+          "email": { "type": "string", "format": "email", "example": "alex@example.com" },
+          "password": { "type": "string", "minLength": 6, "example": "securePassword123" }
+        }
+      },
+      "LoginInput": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "alex@example.com" },
+          "password": { "type": "string", "example": "securePassword123" }
+        }
+      },
+      "SuccessMessage": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string", "example": "Operation completed successfully" }
+        }
+      },
+      "ErrorMessage": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string", "example": "An error occurred" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RegisterInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully; verification email dispatched",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "user": { "$ref": "#/components/schemas/User" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Validation error (invalid email, password < 6 chars)" },
+          "409": { "description": "Conflict: email is already registered" },
+          "429": { "description": "Too many requests (rate limit reached)" }
+        }
+      }
+    },
+    "/api/auth/verify/{token}": {
+      "get": {
+        "summary": "Verify email address via token link",
+        "tags": ["Authentication"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "description": "32-byte crypto verification token sent via email",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verified successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          },
+          "400": { "description": "Invalid, expired, or previously used token" }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Authenticate user credentials and obtain JWT",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful, returns signed JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+                    "user": { "$ref": "#/components/schemas/User" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Invalid email or password (generic to avoid user enumeration)" },
+          "403": { "description": "Email not verified" },
+          "429": { "description": "Too many requests (rate limit reached)" }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "Logout current user (client destroys token)",
+        "tags": ["Authentication"],
+        "responses": {
+          "200": {
+            "description": "Logout confirmation",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "summary": "Get authenticated user profile",
+        "tags": ["Users"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Current user profile (password excluded)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "user": { "$ref": "#/components/schemas/User" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized: missing, invalid, or expired JWT token" }
+        }
+      }
+    }
+  }
+}
