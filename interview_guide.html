@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Backend Developer Interview Q&A and Project Guide</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 16mm 18mm 16mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.55;
+      font-size: 13.5px;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+    }
+    .header h1 {
+      margin: 0 0 6px 0;
+      color: #0f172a;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .header .subtitle {
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+    }
+    .tag {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 6px;
+      margin-top: 6px;
+      border: 1px solid #bfdbfe;
+    }
+    h2 {
+      color: #0f172a;
+      font-size: 18px;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      page-break-after: avoid;
+    }
+    h3 {
+      color: #1e40af;
+      font-size: 14.5px;
+      margin-top: 16px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+    p {
+      margin: 0 0 10px 0;
+    }
+    ul, ol {
+      margin: 0 0 12px 0;
+      padding-left: 22px;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      page-break-inside: avoid;
+    }
+    .card-title {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .qa-box {
+      border-left: 4px solid #2563eb;
+      background: #f8fafc;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      page-break-inside: avoid;
+      border-radius: 0 6px 6px 0;
+    }
+    .qa-box.advanced {
+      border-left-color: #059669;
+    }
+    .qa-question {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .qa-answer {
+      color: #334155;
+      font-size: 13px;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 12px;
+      border: 1px solid #e2e8f0;
+    }
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11.5px;
+      line-height: 1.45;
+      margin: 8px 0 12px 0;
+      overflow-x: auto;
+      page-break-inside: avoid;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px 0;
+      font-size: 12.5px;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 10px;
+      text-align: left;
+    }
+    th {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+    tr:nth-child(even) {
+      background: #f8fafc;
+    }
+    .page-break {
+      page-break-before: always;
+    }
+    .highlight {
+      background: #fef3c7;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-weight: 600;
+      color: #92400e;
+    }
+    .badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+    .badge-get { background: #dbeafe; color: #1e40af; }
+    .badge-post { background: #dcfce7; color: #166534; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Authentication API: Master Interview Guide & Q&A</h1>
+    <p class="subtitle">Complete Portfolio Guide, Architecture Decisions, and Technical Questions for Freshers</p>
+    <div>
+      <span class="tag">Node.js</span>
+      <span class="tag">Express.js</span>
+      <span class="tag">MongoDB / Mongoose</span>
+      <span class="tag">JWT Authentication</span>
+      <span class="tag">Bcrypt Hashing</span>
+      <span class="tag">REST Security</span>
+      <span class="tag">Jest & Supertest</span>
+    </div>
+  </div>
+
+  <h2>1. 30-Second Elevator Pitch (Memorize This!)</h2>
+  <div class="card">
+    <p><em>"I built a production-style RESTful Authentication API using Node.js, Express, MongoDB, and JSON Web Tokens (JWT). Rather than writing a basic tutorial implementation, I focused on defensive backend practices: hashing passwords using Bcrypt with 10 salt rounds, enforcing token-based email activation via Nodemailer, issuing stateless JWTs with short expiry, mitigating account enumeration attacks on login, adding IP rate limiting against brute force, and architecting custom Express middleware for route protection. I also thoroughly documented all endpoints with Swagger UI and wrote automated integration tests using Jest and Supertest."</em></p>
+  </div>
+
+  <h2>2. API Endpoints Overview</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Endpoint</th>
+        <th>Access Level</th>
+        <th>Primary Purpose</th>
+        <th>Status Codes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/auth/register</code></td>
+        <td>Public (Rate Limited)</td>
+        <td>Validates input, hashes password, saves user, sends verification email</td>
+        <td>201, 400, 409, 429</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/auth/verify/:token</code></td>
+        <td>Public</td>
+        <td>Activates user account and clears verification token</td>
+        <td>200, 400</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/auth/login</code></td>
+        <td>Public (Rate Limited)</td>
+        <td>Verifies credentials & activation; issues 1-day signed JWT</td>
+        <td>200, 400, 401, 403, 429</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-post">POST</span></td>
+        <td><code>/api/auth/logout</code></td>
+        <td>Public</td>
+        <td>Instructs client to clear stored JWT token</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-get">GET</span></td>
+        <td><code>/api/users/me</code></td>
+        <td>Protected (Bearer JWT)</td>
+        <td>Validates JWT in middleware and returns profile (no password)</td>
+        <td>200, 401</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3. Core Architectural Decisions Explained</h2>
+  
+  <div class="card">
+    <div class="card-title">1. Separation of <code>src/app.js</code> and <code>server.js</code></div>
+    <p><strong>Why:</strong> If you start listening on a network port inside the file that configures Express, every integration test suite spinning up the app creates conflicting network port listeners. Separating them allows test runners like Supertest to import <code>app</code> and inject virtual HTTP requests directly in-memory without binding to a physical port.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">2. Bcrypt with 10 Salt Rounds (Never Plain Hashes)</div>
+    <p><strong>Why:</strong> Fast hash functions like MD5 or SHA-256 are dangerous for passwords because modern GPUs can compute billions of guesses per second. Bcrypt is an intentionally slow adaptive key derivation function. Its salt is randomly generated and prepended to the hash, completely nullifying precomputed Rainbow Table lookup attacks.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3. Generic Login Error Messages (Preventing User Enumeration)</div>
+    <p><strong>Why:</strong> If an API returns <em>"User not found"</em> for a wrong email, and <em>"Incorrect password"</em> for a wrong password, an attacker can script requests to discover which emails belong to registered users. Returning the identical message <code>"Invalid email or password"</code> with HTTP 401 completely stops user enumeration.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">4. Minimal JWT Payload (Only <code>{ id: user._id }</code>)</div>
+    <p><strong>Why:</strong> JWT payloads are only Base64URL encoded—<strong>not encrypted</strong>. Anyone intercepting the token can decode and read its content. Keeping only the user ID prevents exposing confidential data and keeps the HTTP header lightweight on every single request.</p>
+  </div>
+
+  <div class="page-break"></div>
+
+  <h2>4. High-Yield Interview Questions & Answers</h2>
+
+  <div class="qa-box">
+    <div class="qa-question">Q1: What is the difference between Authentication and Authorization?</div>
+    <div class="qa-answer">
+      <ul>
+        <li><strong>Authentication (AuthN):</strong> Verifying <em>who the user is</em>. (e.g., logging in with email and password to prove identity, resulting in an issued JWT).</li>
+        <li><strong>Authorization (AuthZ):</strong> Verifying <em>what permissions the authenticated user has</em>. (e.g., checking if an authenticated user with ID 123 has permission to edit document 456 or access an admin panel).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-box">
+    <div class="qa-question">Q2: Why do we hash passwords? Why use Bcrypt instead of SHA-256 or AES Encryption?</div>
+    <div class="qa-answer">
+      <ul>
+        <li><strong>Why Hash:</strong> A hash is a one-way mathematical function. If the database is compromised, an attacker cannot reverse the hash back into the plain-text password.</li>
+        <li><strong>Why not Encryption (AES):</strong> Encryption is two-way (reversible with a decryption key). Passwords should never need to be decrypted—only verified.</li>
+        <li><strong>Why Bcrypt over SHA:</strong> SHA-256 is designed to be fast (for checksums). An attacker with a GPU can calculate 10+ billion SHA hashes per second. Bcrypt incorporates a cost factor (salt rounds) that forces CPU/memory work, drastically slowing down brute-force attacks to a crawl.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-box">
+    <div class="qa-question">Q3: What is a JSON Web Token (JWT)? What are its three parts?</div>
+    <div class="qa-answer">
+      A JWT is a compact, URL-safe standard (RFC 7519) for transmitting claims securely. It has three parts separated by dots (<code>header.payload.signature</code>):
+      <ol>
+        <li><strong>Header:</strong> Specifies the algorithm (e.g., <code>{"alg": "HS256", "typ": "JWT"}</code>).</li>
+        <li><strong>Payload:</strong> Contains claims/data (e.g., <code>{"id": "65b...", "exp": 1731...}</code>).</li>
+        <li><strong>Signature:</strong> Created by taking the Base64 encoded Header and Payload, hashing them together with the server's private secret key: <code>HMACSHA256(base64(header) + "." + base64(payload), secret)</code>. The server checks this signature to guarantee the client did not tamper with the payload.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="qa-box">
+    <div class="qa-question">Q4: Why keep the JWT payload small and add an expiration time?</div>
+    <div class="qa-answer">
+      <ul>
+        <li><strong>Small Payload:</strong> The token travels in the <code>Authorization</code> header on every single HTTP request. A bloated token consumes bandwidth. Furthermore, JWT data is readable by anyone who decodes it—never store passwords, credit cards, or sensitive data inside it.</li>
+        <li><strong>Expiration (<code>expiresIn: '1d'</code>):</strong> Since JWT is stateless, the backend does not look up active sessions in a database. If an attacker steals a token, they can impersonate the user until it expires. Short expiration limits this window of vulnerability.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-box">
+    <div class="qa-question">Q5: How does Logout work with stateless JWTs, and what are its limitations?</div>
+    <div class="qa-answer">
+      <ul>
+        <li><strong>How it works:</strong> In pure stateless authentication, logout is handled by the client application (e.g., frontend browser deletes the token from <code>localStorage</code> or cookies).</li>
+        <li><strong>Limitation:</strong> The token remains cryptographically valid on the server until its expiration timestamp passes. If a token was intercepted, it can still be used.</li>
+        <li><strong>Production Solution:</strong> Use a fast in-memory store like <strong>Redis</strong> to maintain a "token blacklist" (or store revoked Token IDs with a TTL matching the token's remaining lifetime).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-box">
+    <div class="qa-question">Q6: What is Express Middleware? Walk through your <code>authMiddleware</code>.</div>
+    <div class="qa-answer">
+      Middleware is a function that sits between the incoming request and the final route handler, with access to <code>(req, res, next)</code>. It can inspect, alter, or terminate the request.<br>
+      <strong>Walkthrough of <code>authMiddleware.js</code>:</strong>
+      <ol>
+        <li>Reads <code>req.headers.authorization</code> and checks if it starts with <code>"Bearer "</code>. Returns <code>401 Unauthorized</code> if missing.</li>
+        <li>Extracts the raw token string and verifies it with <code>jwt.verify(token, process.env.JWT_SECRET)</code>.</li>
+        <li>Queries MongoDB with <code>User.findById(decoded.id).select('-password')</code> to ensure the account still exists and password hash is never exposed in memory.</li>
+        <li>Attaches the user object to <code>req.user = user</code> and calls <code>next()</code> so the downstream controller has access to the authenticated user.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="qa-box">
+    <div class="qa-question">Q7: How does Email Verification work in this project?</div>
+    <div class="qa-answer">
+      <ol>
+        <li>On registration, the server generates a cryptographically secure 32-byte hex string using Node's native <code>crypto.randomBytes(32).toString('hex')</code>.</li>
+        <li>It saves this string into <code>user.verificationToken</code> with <code>isVerified: false</code>.</li>
+        <li>Nodemailer sends a link (<code>/api/auth/verify/:token</code>).</li>
+        <li>When clicked, the endpoint queries the database for a user matching the token, updates <code>isVerified = true</code>, and sets <code>verificationToken = null</code> to prevent token replay attacks.</li>
+        <li>The login endpoint strictly blocks any user where <code>isVerified === false</code> with HTTP 403.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="qa-box advanced">
+    <div class="qa-question">Q8: If you had more time, what would you add to scale this in production?</div>
+    <div class="qa-answer">
+      <ol>
+        <li><strong>Dual-Token Pattern (Access + Refresh Tokens):</strong> Issue a 15-minute Access Token stored in memory, and an HTTP-Only secure cookie containing a Refresh Token stored in the database with rotation to handle instant session revocation.</li>
+        <li><strong>Forgot/Reset Password Flow:</strong> Secure password reset using time-bounded (10-minute) hashed tokens sent via email.</li>
+        <li><strong>Role-Based Access Control (RBAC):</strong> Role middleware (e.g., <code>authorizeRoles('admin', 'moderator')</code>) to guard sensitive admin routes.</li>
+        <li><strong>Redis Token Blacklisting:</strong> Real-time session invalidation on logout.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <h2>5. Project File-by-File Breakdown Cheat Sheet</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">File Path</th>
+        <th>Single-Sentence Responsibility to Say in an Interview</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>server.js</code></td>
+        <td>Loads environment variables, connects to MongoDB, and binds the HTTP server to port 5001.</td>
+      </tr>
+      <tr>
+        <td><code>src/app.js</code></td>
+        <td>Assembles Express middleware (Helmet, CORS, JSON parser, Swagger, routes, and error handler).</td>
+      </tr>
+      <tr>
+        <td><code>src/config/db.js</code></td>
+        <td>Connects to MongoDB using Mongoose with fail-fast behavior (<code>process.exit(1)</code>) on connection errors.</td>
+      </tr>
+      <tr>
+        <td><code>src/models/User.js</code></td>
+        <td>Defines the Mongoose User schema with lowercase email, password length rules, and auto-timestamps.</td>
+      </tr>
+      <tr>
+        <td><code>src/controllers/authController.js</code></td>
+        <td>Handles registration, verification token clearing, anti-enumeration login, and JWT issuance.</td>
+      </tr>
+      <tr>
+        <td><code>src/controllers/userController.js</code></td>
+        <td>Returns the sanitized profile of the authenticated user already attached to <code>req.user</code>.</td>
+      </tr>
+      <tr>
+        <td><code>src/middleware/authMiddleware.js</code></td>
+        <td>Intercepts protected requests, verifies the JWT signature, and attaches the active user to <code>req.user</code>.</td>
+      </tr>
+      <tr>
+        <td><code>src/middleware/errorHandler.js</code></td>
+        <td>Centralizes API error responses (converts MongoDB 11000 duplicate errors to 409 and validation to 400).</td>
+      </tr>
+      <tr>
+        <td><code>src/routes/authRoutes.js</code></td>
+        <td>Defines authentication endpoints with input validation rules and 15-minute IP rate limiting.</td>
+      </tr>
+      <tr>
+        <td><code>src/routes/userRoutes.js</code></td>
+        <td>Exposes protected user profile routes guarded by <code>authMiddleware</code>.</td>
+      </tr>
+      <tr>
+        <td><code>src/utils/sendEmail.js</code></td>
+        <td>Sends verification emails via Nodemailer with a local console fallback for offline development.</td>
+      </tr>
+      <tr>
+        <td><code>src/docs/swagger.json</code></td>
+        <td>OpenAPI 3.0 specification enabling interactive API testing at <code>/api-docs</code>.</td>
+      </tr>
+      <tr>
+        <td><code>tests/auth.test.js</code></td>
+        <td>Automated Jest + Supertest integration test suite covering 7 end-to-end authentication scenarios.</td>
+      </tr>
+      <tr>
+        <td><code>postman_collection.json</code></td>
+        <td>Ready-to-import Postman v2.1 collection with automatic token extraction test scripts.</td>
+      </tr>
+      <tr>
+        <td><code>Dockerfile</code> & <code>docker-compose.yml</code></td>
+        <td>Containerizes the Node application and provisions a linked MongoDB container with a single command.</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
